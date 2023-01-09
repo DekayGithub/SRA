@@ -11,6 +11,15 @@ const getData = (uri, qs) =>
     json: true,
   });
 
+const getTeamsFirstOpponent = (scheduleData, teamId) => {
+  const { teams } = scheduleData.dates[0].games[0];
+  const teamsPlayed = Object.values(teams).map((team) => ({
+    id: team.team.id,
+    name: team.team.name,
+  }));
+  return teamsPlayed.filter((team) => team.id !== teamId);
+};
+
 const startTeamNHLPipeline = async (teamId, season) => {
   try {
     // extract
@@ -33,10 +42,7 @@ const startTeamNHLPipeline = async (teamId, season) => {
       goalsPerGame,
     } = teamStatData.stats[0].splits[0].stat;
 
-    const teamsPlayed = Object.values(teamSchedule.dates[0].games[0].teams).map(
-      (team) => ({ id: team.team.id, name: team.team.name })
-    );
-    const firstGameOpponent = teamsPlayed.filter((team) => team.id !== teamId);
+    const { name: opponentName } = getTeamsFirstOpponent(teamSchedule, teamId);
     const firstGameDate = teamSchedule.dates[0].date;
 
     // load
