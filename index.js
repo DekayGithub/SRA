@@ -11,15 +11,20 @@ const getData = (uri, qs) =>
     json: true,
   });
 
-const startNHLPipeline = async (teamId, season) => {
+const startTeamNHLPipeline = async (teamId, season) => {
   try {
     // extract
-    const teamData = await getData(TEAMS_API_URL + `/${teamId}`);
+    const allTeamData = Promise.all([
+      getData(TEAMS_API_URL + `/${teamId}`),
+      getData(TEAMS_API_URL + `/${teamId}/stats`, { season }),
+      getData(TEAMS_SCHEDULE_URL, { season, teamId }),
+    ]);
+
+    const [teamData, teamStatData, teamSchedule] = await allTeamData;
+
+    // transform
     const { id, name, venue } = teamData.teams[0];
 
-    const teamStatData = await getData(TEAMS_API_URL + `/${teamId}/stats`, {
-      season,
-    });
     const {
       gamesPlayed,
       wins,
@@ -28,16 +33,11 @@ const startNHLPipeline = async (teamId, season) => {
       goalsPerGame,
     } = teamStatData.stats[0].splits[0].stat;
 
-    const teamSchedule = await getData(TEAMS_SCHEDULE_URL, {
-      season,
-      teamId,
-    });
     const teamsPlayed = Object.values(teamSchedule.dates[0].games[0].teams).map(
       (team) => ({ id: team.team.id, name: team.team.name })
     );
     const firstGameOpponent = teamsPlayed.filter((team) => team.id !== teamId);
     const firstGameDate = teamSchedule.dates[0].date;
-    // transform
 
     // load
   } catch (error) {
@@ -45,4 +45,4 @@ const startNHLPipeline = async (teamId, season) => {
   }
 };
 
-startNHLPipeline(5, "20032004");
+startTeamNHLPipeline(5, "20032004");
