@@ -1,5 +1,4 @@
 const { handleError } = require("./errorHandler");
-
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 const writeCSV = (fileName, headers, records) => {

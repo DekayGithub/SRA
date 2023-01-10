@@ -1,6 +1,6 @@
-const rp = require("request-promise");
 const { handleError } = require("./errorHandler");
 const { writeCSV } = require("./csvWriter");
+const { getData } = require("./request");
 
 const TEAMS_API_URL = "https://statsapi.web.nhl.com/api/v1/teams";
 const TEAMS_SCHEDULE_URL = "https://statsapi.web.nhl.com/api/v1/schedule";
@@ -16,14 +16,6 @@ const HEADERS = [
   { id: "firstGameDate", title: "Date of First Game" },
   { id: "firstOpponent", title: "First Opponent" },
 ];
-
-const getData = (uri, qs) =>
-  rp({
-    uri,
-    method: "GET",
-    ...(qs ? { qs } : {}),
-    json: true,
-  });
 
 const getTeamsFirstOpponent = (scheduleData, teamId) => {
   const { teams } = scheduleData.dates[0].games[0];
