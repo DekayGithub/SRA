@@ -1,4 +1,6 @@
 const rp = require("request-promise");
+const { handleError } = require("./errorHandler");
+const { writeCSV } = require("./csvWriter");
 
 const TEAMS_API_URL = "https://statsapi.web.nhl.com/api/v1/teams";
 const TEAMS_SCHEDULE_URL = "https://statsapi.web.nhl.com/api/v1/schedule";
@@ -29,7 +31,7 @@ const getTeamsFirstOpponent = (scheduleData, teamId) => {
     id: team.team.id,
     name: team.team.name,
   }));
-  return teamsPlayed.filter((team) => team.id !== teamId);
+  return teamsPlayed.find((team) => team.id !== teamId);
 };
 
 const startTeamNHLPipeline = async (teamId, season) => {
@@ -57,9 +59,24 @@ const startTeamNHLPipeline = async (teamId, season) => {
     const { name: opponentName } = getTeamsFirstOpponent(teamSchedule, teamId);
     const firstGameDate = teamSchedule.dates[0].date;
 
+    const records = [
+      {
+        teamId: id,
+        teamName: name,
+        venueName: venue.name,
+        gamesPlayed,
+        wins,
+        losses,
+        points,
+        goalsPerGame,
+        firstGameDate,
+        firstOpponent: opponentName,
+      },
+    ];
     // load
+    writeCSV(`${season}-${name}`, HEADERS, records);
   } catch (error) {
-    console.log("NHL Team Pipeline error:", error);
+    handleError("NHL Team Pipeline", error);
   }
 };
 
