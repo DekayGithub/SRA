@@ -30,7 +30,6 @@ const startPlayerNHLPipeline = async (playerId, season) => {
     ]);
 
     const [playerData, playerStats] = await allPlayerData;
-
     const {
       id,
       fullName,
@@ -39,10 +38,10 @@ const startPlayerNHLPipeline = async (playerId, season) => {
       primaryNumber,
       rookie,
       primaryPosition,
-    } = playerData.people[0];
+    } = playerData.data.people[0];
 
     const { assists, goals, games, hits, points } =
-      playerStats.stats[0].splits[0].stat;
+      playerStats.data.stats[0].splits[0].stat;
 
     // transform
     const records = [

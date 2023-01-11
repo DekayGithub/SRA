@@ -38,7 +38,7 @@ const startTeamNHLPipeline = async (teamId, season) => {
     const [teamData, teamStatData, teamSchedule] = await allTeamData;
 
     // transform
-    const { id, name, venue } = teamData.teams[0];
+    const { id, name, venue } = teamData.data.teams[0];
 
     const {
       gamesPlayed,
@@ -46,10 +46,13 @@ const startTeamNHLPipeline = async (teamId, season) => {
       losses,
       pts: points,
       goalsPerGame,
-    } = teamStatData.stats[0].splits[0].stat;
+    } = teamStatData.data.stats[0].splits[0].stat;
 
-    const { name: opponentName } = getTeamsFirstOpponent(teamSchedule, teamId);
-    const firstGameDate = teamSchedule.dates[0].date;
+    const { name: opponentName } = getTeamsFirstOpponent(
+      teamSchedule.data,
+      teamId
+    );
+    const firstGameDate = teamSchedule.data.dates[0].date;
 
     const records = [
       {

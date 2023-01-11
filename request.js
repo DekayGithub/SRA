@@ -1,11 +1,10 @@
-const rp = require("request-promise");
+const axios = require("axios");
 
-const getData = (uri, qs) =>
-  rp({
-    uri,
+const getData = (url, qs) =>
+  axios({
+    url,
     method: "GET",
-    ...(qs ? { qs } : {}),
-    json: true,
+    params: { ...(qs ? qs : {}) },
   });
 
 module.exports = {
