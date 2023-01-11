@@ -2,6 +2,7 @@ const { handleError } = require("./errorHandler");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 const writeCSV = (fileName, headers, records) => {
+  if (!fileName) throw new Error(`File Name is ${fileName}`);
   const write = createCsvWriter({
     path: `CSVs/${fileName}.csv`,
     header: headers,

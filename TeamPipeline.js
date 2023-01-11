@@ -75,4 +75,6 @@ const startTeamNHLPipeline = async (teamId, season) => {
   }
 };
 
-startTeamNHLPipeline(5, "20032004");
+module.exports = {
+  startTeamNHLPipeline,
+};

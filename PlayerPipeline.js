@@ -67,4 +67,6 @@ const startPlayerNHLPipeline = async (playerId, season) => {
   }
 };
 
-startPlayerNHLPipeline(8476792, "20182019");
+module.exports = {
+  startPlayerNHLPipeline,
+};
