@@ -11,6 +11,7 @@ const getData = async (url, qs) => {
     return response;
   } catch (error) {
     handleError("Get Data", error);
+    throw error;
   }
 };
 
