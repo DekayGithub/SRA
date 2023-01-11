@@ -1,4 +1,4 @@
-const { writeCSV } = require("./csvWriter");
+const { writeCSV } = require("../csvWriter");
 
 describe("CSV Writer", () => {
   test("Calls the write method", () => {});
