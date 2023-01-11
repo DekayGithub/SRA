@@ -12,7 +12,7 @@ const writeCSV = (fileName, headers, records) => {
     .then(() => {
       console.log("CSV file created");
     })
-    .catch(handleError);
+    .catch((error) => handleError("CSV Writer", error));
 };
 
 module.exports = {
